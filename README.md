@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📝 Todo App 
+A modern, offline-capable Todo application built with **Next.js 16**, **TypeScript**, **React Query v5**, **Dexie.js**, **Tailwind CSS**, and **ShadCN UI**.  
+It supports full **CRUD operations**, **offline persistence**, **pagination**, **search/filter**, and **responsive design**.
 
-## Getting Started
+---
 
-First, run the development server:
+## 🚀 Tech Stack
 
+| Technology | Purpose |
+|-------------|----------|
+| [Next.js 16](https://nextjs.org/) | React framework for SSR, routing, and performance |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe modern JavaScript |
+| [React Query v5](https://tanstack.com/query) | Data fetching, caching, and mutation management |
+| [Dexie.js](https://dexie.org/) | IndexedDB wrapper for offline persistence |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
+| [ShadCN UI](https://ui.shadcn.com/) | Accessible UI components built with Radix and Tailwind |
+| [Lucide Icons](https://lucide.dev/) | SVG icons |
+| [Sonner](https://sonner.emilkowal.ski/) | Elegant toast notifications |
+
+---
+
+### 📦 Installation
+
+##### 1️⃣ Clone Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Edith-Anurika-Monday1/todo-next.git
+cd todo-next
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Install Dependencies
+install all dependencies according to the tech stack mentioned above.
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Summary
+A sleek and modern Todo application built using Next.js 16, TypeScript, React Query v5, Dexie.js, Tailwind CSS, and ShadCN UI.
+It supports CRUD operations, offline mode, pagination, search/filter, and responsive design.
 
-## Learn More
+### 🚀 Features
 
-To learn more about Next.js, take a look at the following resources:
+- ✅ Create, Edit, Delete, and View todos.
+- 🔍 Search and filter (Completed / Incomplete / All).
+- 📱 Fully responsive (mobile-first).
+- 💾 Offline data persistence with Dexie.js.
+- 🧭 Smooth navigation with Next.js routing.
+- 🔔 Elegant notifications via Sonner.
+- ⚡ Fast, accessible UI with ShadCN and Radix.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🧑‍💻 Author
 
-## Deploy on Vercel
+Edith Anurika Monday
+junior Frontend Developer • React | Next.js | TypeScript | Tailwind
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+##### 💬 Community & Contributions
+💡 Suggestions, improvements, and pull requests are welcome!
+If you view the repository and notice a bug, improvement idea, or UI enhancement:  feedback, feature requests, and collaboration ideas to make this project even better, Or submit a Pull Request directly.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Happy coding...

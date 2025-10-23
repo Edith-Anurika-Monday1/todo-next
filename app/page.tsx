@@ -1,103 +1,125 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import TodoCard from "@/components/TodoCard"
+import SearchFilter from "@/components/SearchFilter"
+import Pagination from "@/components/Pagination"
+import TodoForm from "@/components/TodoForm"
+
+export default function HomePage() {
+  const [todos, setTodos] = useState<any[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filter, setFilter] = useState("all")
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/todos")
+        if (!res.ok) throw new Error("Network error")
+        const data = await res.json()
+        setTodos(data.slice(0, 50))
+        toast.success("Todos loaded successfully")
+      } catch {
+        toast.error("Failed to load todos")
+      }
+    }
+    loadTodos()
+  }, [])
+
+  const filteredTodos = todos.filter((todo) => {
+    const matchSearch = todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchFilter =
+      filter === "completed"
+        ? todo.completed
+        : filter === "incomplete"
+        ? !todo.completed
+        : true
+    return matchSearch && matchFilter
+  })
+
+  const totalPages = Math.max(1, Math.ceil(filteredTodos.length / itemsPerPage))
+  const currentTodos = filteredTodos.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this todo?")) {
+      setTodos((prev) => prev.filter((t) => t.id !== id))
+      toast.success("Todo deleted")
+    }
+  }
+
+  const handleToggle = (id: number) => {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+    )
+    toast.success("Todo status updated")
+  }
+
+  const handleEdit = (id: number, newTitle: string) => {
+    if (!newTitle.trim()) {
+      toast.error("Title cannot be empty")
+      return
+    }
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, title: newTitle } : t))
+    )
+    toast.success("Todo edited successfully")
+  }
+
+  const handleCreate = (title: string) => {
+    if (!title.trim()) {
+      toast.error("Title cannot be empty")
+      return
+    }
+    const newTodo = {
+      id: Date.now(),
+      title,
+      completed: false,
+    }
+    setTodos((prev) => [newTodo, ...prev])
+    toast.success("Todo added successfully")
+    setCurrentPage(1)
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="card p-8 bg-white min-h-[68vh]">
+      <h1 className="text-3xl font-bold text-center text-green-700 mb-6">My Todo App</h1>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div className="mb-6">
+        <TodoForm onSuccess={(t: any) => { handleCreate(t.title) }} />
+      </div>
+
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="col-span-2">
+          <SearchFilter
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filter={filter}
+            setFilter={setFilter}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      <div className="mb-4">
+        <TodoCard
+          todos={currentTodos}
+          onDelete={handleDelete}
+          onToggle={handleToggle}
+          onEdit={handleEdit}
+        />
+      </div>
+
+      <Pagination
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={(p: number) => setCurrentPage(p)}
+/>
+
     </div>
-  );
+  )
 }
